@@ -21,8 +21,8 @@ interface NewsDao {
     suspend fun deleteNews(news: News)
 
     @Query("SELECT * FROM NEWS ORDER BY id DESC")
-    fun getAllNotes(): LiveData<List<News>>
+    fun getAllNews(): LiveData<List<News>>
 
     @Query("SELECT * FROM NEWS WHERE newsTitle LIKE :query OR newsDescription LIKE :query")
-    fun searchNote(query: String?): LiveData<List<News>>
+    fun searchNews(query: String?): LiveData<List<News>>
 }
