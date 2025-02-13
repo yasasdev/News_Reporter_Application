@@ -1,10 +1,13 @@
 package com.example.newsreporterapplication.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsreporterapplication.databinding.NoteLayoutBinding
+import com.example.newsreporterapplication.fragments.HomeFragmentDirections
 import com.example.newsreporterapplication.model.News
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
@@ -25,14 +28,24 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     }
     val differ = AsyncListDiffer(this, differCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        TODO("Not yet implemented")
+        return NewsViewHolder(
+            NoteLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return differ.currentList.size
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val currentNews = differ.currentList[position]
+
+        holder.itemBinding.noteTitle.text = currentNews.newsTitle
+        holder.itemBinding.noteDesc.text = currentNews.newsDescription
+
+        holder.itemView.setOnClickListener {
+            val direction = HomeFragmentDirections.actionHomeFragment2ToEditNoteFragment2(currentNews)
+            it.findNavController().navigate(direction)
+        }
     }
 }
