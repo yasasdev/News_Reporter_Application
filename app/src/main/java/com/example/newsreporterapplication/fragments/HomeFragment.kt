@@ -46,6 +46,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         newsViewModel = (activity as MainActivity).newsViewModel
+        setupHomeRecyclerView()
 
         binding.addNoteFab.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment2_to_addNoteFragment2)
@@ -82,14 +83,26 @@ class HomeFragment : Fragment(R.layout.fragment_home), SearchView.OnQueryTextLis
 
     private fun searchNote(query: String?){
         val searchQuery = "%$query"
+
+        newsViewModel.searchNews(searchQuery).observe(this) {list ->
+            newsAdapter.differ.submitList(list)
+        }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        TODO("Not yet implemented")
+        if (newText != null){
+            searchNote(newText)
+        }
+        return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        homeBinding = null
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
