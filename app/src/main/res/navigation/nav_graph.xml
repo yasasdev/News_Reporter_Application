@@ -4,36 +4,51 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment2">
 
+    <!-- Home Fragment -->
     <fragment
         android:id="@+id/homeFragment2"
         android:name="com.example.newsreporterapplication.fragments.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="HomeFragment">
+
+        <!-- Navigate to AddNoteFragment -->
         <action
             android:id="@+id/action_homeFragment2_to_addNoteFragment2"
             app:destination="@id/addNoteFragment2" />
+
+        <!-- Navigate to EditNoteFragment -->
         <action
             android:id="@+id/action_homeFragment2_to_editNoteFragment2"
             app:destination="@id/editNoteFragment2" />
     </fragment>
+
+    <!-- Add Note Fragment -->
     <fragment
         android:id="@+id/addNoteFragment2"
         android:name="com.example.newsreporterapplication.fragments.AddNoteFragment"
-        android:label="AddNoteFragment" >
+        android:label="AddNoteFragment">
+
+        <!-- Navigate back to HomeFragment2 after saving -->
         <action
             android:id="@+id/action_addNoteFragment2_to_homeFragment2"
             app:destination="@id/homeFragment2" />
     </fragment>
+
+    <!-- Edit Note Fragment -->
     <fragment
         android:id="@+id/editNoteFragment2"
         android:name="com.example.newsreporterapplication.fragments.EditNoteFragment"
-        android:label="EditNoteFragment" >
+        android:label="EditNoteFragment">
+
+        <!-- Navigate back to HomeFragment2 -->
         <action
             android:id="@+id/action_editNoteFragment2_to_homeFragment2"
             app:destination="@id/homeFragment2" />
 
+        <!-- Argument to pass News object -->
         <argument
             android:name="news"
             app:argType="com.example.newsreporterapplication.model.News"
             app:nullable="true" />
     </fragment>
+
 </navigation>

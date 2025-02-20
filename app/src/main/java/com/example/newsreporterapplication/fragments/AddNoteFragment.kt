@@ -1,39 +1,32 @@
 package com.example.newsreporterapplication.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.newsreporterapplication.MainActivity
 import com.example.newsreporterapplication.R
 import com.example.newsreporterapplication.databinding.FragmentAddNoteBinding
 import com.example.newsreporterapplication.model.News
 import com.example.newsreporterapplication.viewmodel.NewsViewModel
 
-
 class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
 
-    private var addNoteBinding: FragmentAddNoteBinding? = null
-    private val binding get() = addNoteBinding!!
+    private var _binding: FragmentAddNoteBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var newsViewModel: NewsViewModel
-    private lateinit var addNewsView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        addNoteBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentAddNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,22 +37,24 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         newsViewModel = (activity as MainActivity).newsViewModel
-        addNewsView = view
+
+        // Set Toolbar as ActionBar
+        val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
-    private fun saveNews(view: View){
+    private fun saveNews() {
         val newsTitle = binding.addNoteTitle.text.toString().trim()
         val newsDescription = binding.addNoteDesc.text.toString().trim()
-//        val newsImage = binding.add
 
-        if (newsTitle.isNotEmpty()){
+        if (newsTitle.isNotEmpty()) {
             val news = News(0, newsTitle, newsDescription, "")
             newsViewModel.addNews(news)
 
-            Toast.makeText(addNewsView.context, "News Saved!", Toast.LENGTH_SHORT).show()
-            view.findNavController().popBackStack(R.id.homeFragment2, false)
+            Toast.makeText(requireContext(), "News Saved!", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_addNoteFragment2_to_homeFragment2)
         } else {
-            Toast.makeText(addNewsView.context, "Please enter note title!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please enter a note title!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -69,16 +64,17 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when(menuItem.itemId){
+        return when (menuItem.itemId) {
             R.id.saveMenu -> {
-                saveNews(addNewsView)
+                saveNews()
                 true
-            } else -> false
+            }
+            else -> false
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        addNoteBinding = null
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
