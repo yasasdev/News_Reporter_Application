@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun validateCredentials(email: String, password: String): Boolean {
-        val validEmail = "yasaslekamge@gmail.com" // Replace with database validation
+        val validEmail = "yasaslekamge@gmail.com"
         val validPassword = "yasas123"
 
         return email == validEmail && password == validPassword
